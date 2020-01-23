@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'com.piekill'
-version '1.0'
+version '1.1'
 
 sourceCompatibility = 1.8
 
@@ -22,7 +22,8 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
-        Initial release of the plugin."""
+        Version 1.1: use background thread; exclude hidden files/dirs.</br>
+        Version 1.0: initial release of the plugin."""
 }
 
 jar {
