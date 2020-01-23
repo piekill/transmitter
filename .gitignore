@@ -1,0 +1,19 @@
+*.class
+*.iml
+.idea/
+.DS_Store
+target/**
+# Package Files #
+*.jar
+*.war
+*.ear
+*.keytab
+target
+# log files
+log
+.project
+.settings/
+.classpath
+.vscode
+.gradle
+build
