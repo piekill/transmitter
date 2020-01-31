@@ -14,7 +14,7 @@
     <a href="https://github.com/piekill/transmitter">Github</a>
     ]]></description>
 
-    <idea-version since-build="173.2099.1" />
+    <idea-version since-build="183.3795.13" />
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
@@ -32,6 +32,11 @@
         <action id="com.piekill.transmitting" class="com.piekill.transmitter.TransmitterAction"
                 text="Transmit Project to Default Location" icon="/transmitter.svg">
             <add-to-group group-id="RevealGroup" anchor="last"/>
+        </action>
+        <action id="com.piekill.transmitting.current" class="com.piekill.transmitter.TransmitterCurrentAction"
+                text="Transmit to Default Location" icon="/transmitter.svg"
+                description="Transmit current file or directory to default location">
+            <add-to-group group-id="RevealGroup" anchor="before" relative-to-action="com.piekill.transmitting"/>
         </action>
     </actions>
 </idea-plugin>

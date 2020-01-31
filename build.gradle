@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'com.piekill'
-version '1.2'
+version '1.3'
 
 sourceCompatibility = 1.8
 
@@ -23,6 +23,7 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
+        Version 1.3: support sending specific file/directory; fix compatible builds.</br>
         Version 1.2: change compatible builds.</br>
         Version 1.1: use background thread; exclude hidden files/dirs.</br>
         Version 1.0: initial release of the plugin."""

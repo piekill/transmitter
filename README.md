@@ -15,6 +15,8 @@ Repo for Jetbrains plugin **Transmitter**. Transmitter is a simple transmission 
 
 3. Send project using "Transmit project to Default Location" in the context menu
 
+4. Or send current file/directory using "Transmit to Default Location"
+
 #### Screenshots
 ![config_menu](https://github.com/piekill/transmitter/blob/master/screenshots/config_menu.png?raw=true "Configuration Menu")
 ![config_dialog](https://github.com/piekill/transmitter/blob/master/screenshots/config_dialog.png?raw=true "Configuration Dialog")
