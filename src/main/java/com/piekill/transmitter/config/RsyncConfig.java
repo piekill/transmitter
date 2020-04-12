@@ -16,7 +16,7 @@ public class RsyncConfig {
     private static final String prefix = "com.piekill.transmitter.";
     private static final String connKey = prefix + "connections";
     private static final String[] appKeys = {".host", ".port", ".user", ".key.file"};
-    private static final String[] projectKeys = {".exclude", ".remote.path"};
+    private static final String[] projectKeys = {".exclude", ".remote.path", ".include.hidden"};
 
     public RsyncConfig(Project project) {
         this.appProp = PropertiesComponent.getInstance();

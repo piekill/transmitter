@@ -7,7 +7,16 @@ import com.intellij.notification.NotificationType;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.piekill.transmitter.utils.MsgUtil;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class RsyncRunner implements Runnable {
 
@@ -40,11 +49,22 @@ public class RsyncRunner implements Runnable {
             remote = remotePath + filePath.replace(basePath, "");
         }
 
+        List<Path> paths = Stream.of(System.getenv("PATH").split(Pattern.quote(File.pathSeparator)))
+                .map(Paths::get).collect(Collectors.toList());
+        Optional<Path> sshPath = paths.stream().filter(path -> Files.exists(path.resolve("ssh"))).findFirst();
+        if (!sshPath.isPresent()) {
+            MsgUtil.showMsg("Transmission Fail: ssh not installed", NotificationType.ERROR);
+            return;
+        }
+        String sshExec = sshPath.get().toString().concat("/ssh");
+
         RSync rsync = new RSync()
                 .source(base)
                 .destination(config.get(".user") + "@" + config.get(".host") + ":" + remote)
-                .recursive(true)
-                .exclude(".*");
+                .recursive(true);
+        if (config.get(".include.hidden") == null || !Boolean.parseBoolean(config.get(".include.hidden"))) {
+            rsync.exclude(".*");
+        }
         // --rsync-path trick: https://stackoverflow.com/a/14877351
         if (file != null) {
             rsync.rsyncPath("mkdir -p " + remotePath + file.getParent().getPath().replace(basePath, "") + " && rsync");
@@ -55,9 +75,15 @@ public class RsyncRunner implements Runnable {
             String keyFileOpt = config.get(".key.file").equals("") ? "" : " -i " + config.get(".key.file");
             String portOpt = config.get(".port").equals("") ? "" : " -p " + config.get(".port");
             if (config.get(".password").equals("")) {
-                rsync.rsh("/usr/bin/ssh -o StrictHostKeyChecking=no" + keyFileOpt + portOpt);
+                rsync.rsh(sshExec + " -o StrictHostKeyChecking=no" + keyFileOpt + portOpt);
             } else {
-                rsync.rsh("/usr/bin/sshpass -p " + config.get(".password") + " ssh -o StrictHostKeyChecking=no" + keyFileOpt + portOpt);
+                Optional<Path> sshpassPath = paths.stream().filter(path -> Files.exists(path.resolve("sshpass"))).findFirst();
+                if (!sshpassPath.isPresent()) {
+                    MsgUtil.showMsg("Transmission Fail: sshpass not installed", NotificationType.ERROR);
+                    return;
+                }
+                String sshpassExec = sshpassPath.get().toString().concat("/sshpass");
+                rsync.rsh(sshpassExec + " -p " + config.get(".password") + " ssh -o StrictHostKeyChecking=no" + keyFileOpt + portOpt);
             }
         }
         if (!config.get(".exclude").equals("")) {
