@@ -32,6 +32,7 @@ public class TransmitterConfig extends DialogWrapper {
     private JTextField remotePathField;
     private JButton setDefault;
     private JPasswordField passwordField;
+    private JCheckBox includeHiddenFilesCheckBox;
 
     private ListAction listAction;
     private DefaultListModel<String> connListModel;
@@ -98,6 +99,7 @@ public class TransmitterConfig extends DialogWrapper {
         excludeField.addFocusListener(configFieldAdaptor);
         remotePathField.addFocusListener(configFieldAdaptor);
         passwordField.addFocusListener(configFieldAdaptor);
+        includeHiddenFilesCheckBox.addItemListener(e -> saveConfig(false));
 
         keyFileField.addBrowseFolderListener("Choose Key File", "Choose key file", project,
                 new FileChooserDescriptor(true, true, false, false, false, true)
@@ -116,6 +118,7 @@ public class TransmitterConfig extends DialogWrapper {
         passwordField.setText(config.get(".password"));
         excludeField.setText(config.get(".exclude"));
         remotePathField.setText(config.get(".remote.path"));
+        includeHiddenFilesCheckBox.setSelected(Boolean.parseBoolean(config.get(".include.hidden")));
     }
 
     public void addToConnList(String name) {
@@ -158,7 +161,8 @@ public class TransmitterConfig extends DialogWrapper {
             rsyncConfig.saveConfig(idx, connListModel.getElementAt(idx), isDefault,
                     hostField.getText().trim(), portField.getText().trim(), userField.getText().trim(),
                     keyFileField.getText().trim(), String.valueOf(passwordField.getPassword()),
-                    excludeField.getText().trim(), remotePathField.getText().trim());
+                    excludeField.getText().trim(), remotePathField.getText().trim(),
+                    String.valueOf(includeHiddenFilesCheckBox.isSelected()));
             connList.repaint();
         }
     }
